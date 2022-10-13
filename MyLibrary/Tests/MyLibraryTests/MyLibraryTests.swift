@@ -70,34 +70,7 @@ final class MyLibraryTests: XCTestCase {
         XCTAssertNil(isLuckyNumber)
     }
     
-    
-    // Integration Tests
-    func testIsLuckyBecauseWeAlreadyHaveLuckyNumberActual() async {
-        // Given
-
-        let myLibrary = MyLibrary()
-
-        // When
-        let isLuckyNumber = await myLibrary.isLucky(8)
-
-        // Then
-        XCTAssertNotNil(isLuckyNumber)
-        XCTAssert(isLuckyNumber == true)
-    }
-    
-    func testIsLuckyBecauseWeatherHasAnEightActual() async throws {
-        // Given
-
-        let myLibrary = MyLibrary()
-
-        // When
-        let isLuckyNumber = await myLibrary.isLucky(0)
-
-        // Then
-        XCTAssertNotNil(isLuckyNumber)
-        XCTAssert(isLuckyNumber == true)
-    }
-    func testWeatherModel_ShouldPassIfTempIsValid() {
+    func testWeatherModelForValidTemperature() {
         let decoder = JSONDecoder()
         let data = Data("{\"main\": {\"temp\":58}}".utf8)
         do {
@@ -108,14 +81,25 @@ final class MyLibraryTests: XCTestCase {
             XCTFail("Failed to decode temp from json")
         }
     }
-    func testWeatherModel_ShouldFailIfTempIsInvalid() {
+    func testWeatherModelForInvalidTemperature() {
         let decoder = JSONDecoder()
         let data = Data("{\"main\": {\"temp\":\"invalid temp\"}}".utf8)
         do {
-            let container = try decoder.decode(Weather.self, from: data)
+            let _ = try decoder.decode(Weather.self, from: data)
             XCTFail("Should not have been possible to decode temp for invalid input")
         } catch {
             XCTAssert(true == true)
+        }
+    }
+    
+    // Integration Tests
+    func testWeatherServiceReturnsCorrectTemperature() async {
+        let weatherServiceObj = WeatherServiceImpl()
+        do{
+            let temp = try await weatherServiceObj.getTemperature()
+            XCTAssert(temp is Int)
+        } catch {
+            XCTFail("Failed to hit weather service")
         }
     }
 
