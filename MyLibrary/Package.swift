@@ -27,7 +27,10 @@ let package = Package(
             name: "MyLibrary",
             dependencies: ["Alamofire"]),
         .testTarget(
-            name: "MyLibraryTests",
+            name: "Unit Tests",
+            dependencies: ["MyLibrary"]),
+        .testTarget(
+            name: "Integration Tests",
             dependencies: ["MyLibrary"]),
     ]
 )

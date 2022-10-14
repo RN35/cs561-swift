@@ -9,8 +9,10 @@ enum ServiceDomain : String {
   case mock = "http://localhost:3000"
 }
 
+let apiKey:String = "INSERT_YOUR_API_KEY_HERE"
+
 class WeatherServiceImpl: WeatherService {
-    let url = "\(ServiceDomain.mock.rawValue)/data/2.5/weather?q=corvallis&units=imperial&appid=INSERT_YOUR_API_KEY_HERE"
+    let url = "\(ServiceDomain.mock.rawValue)/data/2.5/weather?q=corvallis&units=imperial&appid=\(apiKey)"
     
     func getTemperature() async throws -> Int {
         return try await withCheckedThrowingContinuation { continuation in
